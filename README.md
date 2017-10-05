@@ -1,6 +1,4 @@
 # odbc-install-scricpt
-Add this folder "deps" into your docker project.
+This is a script used to generate the docker image https://hub.docker.com/r/abdalla/python2-mysql/.
 
-This is the drivers and scripts to be used on docker image: https://hub.docker.com/r/abdalla/python2-mysql/
-
-And also you can use this Dockerfile as your own.
+You don't need this if you use the image above, but if you want to create by yourself, feel free to clone this repository and create by your own.
