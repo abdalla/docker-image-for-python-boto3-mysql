@@ -1,4 +1,4 @@
-FROM abdalla/python2-mysql
+FROM python:2
 
 COPY ./deps/requirements.txt ./
 
