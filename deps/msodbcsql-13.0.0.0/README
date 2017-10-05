@@ -1,0 +1,168 @@
+﻿README for MICROSOFT® ODBC DRIVER 13 (Preview) FOR SQL Server®
+
+This file contains instructions and notes about the Microsoft® ODBC Driver 13 (Preview) for SQL Server® (hereafter called 'the driver').
+
+* If you're reading this after being referred by the installation output,
+  see 'Why is there an * in the configuration output?' in Installing below.
+
+What's Inside
+=============
+
+This is the driver and utilities of the Microsoft® ODBC Driver 13 (Preview) for SQL Server®.  The following files are included:
+
+install.sh - The installation script to run to install the driver and its
+utilities.
+
+build_dm.sh - A helpful script used to download, configure and
+build the correct version of the unixODBC Driver Manager if needed.
+
+README - this file.
+
+LICENSE - the license agreement for this product. Used by install.sh.
+
+WARNING - Microsoft's 3rd party liability disclaimer.  Displayed when the
+build_dm.sh script is run.
+
+INSTALL - Installation instructions for the driver.
+
+bin/bcp-13.0.0.0 - Bulk Copy Program.  Used to import and export data
+from a SQL Server table.
+
+bin/bcp.rll - resource library that contains strings for error messages
+used by BCP.  Currently only in US English (en_US).
+
+bin/sqlcmd-13.0.0.0 - Run SQL statements on a server.  Can be used
+interactively.
+
+bin/SQLCMD.rll - resource library that contains strings for error messages
+used by sqlcmd.  Currently only in US English (en_US).
+
+bin/BatchParserGrammar.dfa - file used by sqlcmd
+
+bin/BatchParserGrammar.llr - file used by sqlcmd
+
+docs/en_US.tar.gz - HTML documentation for 
+the driver and its associated utilities.
+
+lib64/libmsodbcsql-13.0.so.0.0 - the driver
+
+lib64/msodbcsqlr13.rll - resource library that contains strings for error
+messages used by the driver. Currently only in US English (en_US).
+
+Prerequisites for Installing
+============================
+
+This driver is only supported on 64-bit Linux. 
+Other configurations are not supported and will not likely work.
+
+The following libraries must be installed for the driver to work:
+  RedHat 7
+   glibc
+   e2fsprogs
+   krb5-libs
+   openssl
+  SUSE 12
+   glibc 
+   libuuid1 
+   krb5 
+   openssl       
+  UBUNTU 15.04
+   libc6 
+   libkrb5-3 
+   libgss3 
+   e2fsprogs 
+   openssl
+
+Most likely these libraries are installed, as they should come installed by 
+default on the supported versions of Linux.
+
+The installing user must have write privileges to the /opt directory by
+default.  Otherwise, directories to place the driver and utilities may be
+specified with the --bin-dir and --lib-dir options of install.sh.
+
+This driver requires the unixODBC Driver Manager 2.3.1.  The driver manager
+must be configured with the following encoding options (other options may 
+also apply):
+
+./configure --enable-iconv --with-iconv-char-enc=UTF8
+  --with-iconv-ucode-enc=UTF16LE
+
+In addition, `odbc_config --cflags` must return -DSIZEOF_LONG_INT=8 and
+must NOT return -DBUILD_LEGACY_64_BIT_MODE.
+
+Also, the installing user must have write permissions to the /usr/bin
+directory if the abbreviated symbolic links to bcp-13.0.0.0 (bcp) and
+sqlcmd-13.0.0.0 (sqlcmd) are to be installed.  Otherwise, use --force to
+skip this step.
+
+The installation script can verify most of these configuration
+prerequisites by running:
+
+./install.sh verify
+
+
+What If The Driver Manager Isn't Configured Properly?
+-----------------------------------------------------
+
+You may build a properly configured unixODBC Driver Manager using the
+build_dm.sh script included.  However, if this script is unable to
+complete, you may configure and build the proper driver manager yourself
+using the instructions in INSTALL.
+
+Installing
+==========
+
+To install the driver once the prerequisites are assured, simply run the
+installation script as follows:
+
+./install.sh install
+
+Options for the installation are:
+  --bin-dir=<directory> - location to deposit bcp and sqlcmd utilities,
+      defaults to the /opt/microsoft/sqlncli/bin directory
+  --lib-dir=<directory> - location to deposit the Microsoft SQL Server ODBC 
+      Driver for Linux, defaults to the /opt/microsoft/sqlncli/lib directory
+  --force - continues installation even if an error occurs
+  --accept-license - forgoes showing the EULA and implies agreement with its 
+                     contents
+
+A successful installation will complete as follows:
+
+Checking for 64 bit Linux compatible OS ..................................... OK
+Checking required libs are installed ........................................ OK
+unixODBC utilities (odbc_config and odbcinst) installed ..................... OK
+unixODBC Driver Manager version 2.3.1 installed ............................. OK
+unixODBC Driver Manager configuration correct .............................. OK*
+Microsoft® ODBC Driver 13 for SQL Server® already installed .......... NOT FOUND
+Microsoft® ODBC Driver 13 for SQL Server® files copied ...................... OK
+Symbolic links for bcp and sqlcmd created ................................... OK
+Microsoft® ODBC Driver 13 for SQL Server® registered ................. INSTALLED
+
+Any problems are reported in the log file, the path to which is printed at
+the end of the installation.
+
+
+Why is there an * in the configuration output?
+----------------------------------------------
+
+The installation script will attempt to verify the configuration of the
+system before installing the driver.  However, the character encoding used by
+the unixODBC Driver Manager cannot be verified through its included utilities.
+If you are not sure of the encoding that the unixODBC 2.3.1 Driver Manager was
+built with, check with your system administrator.  If the encoding still cannot
+be verified, you might need to build and install a new copy.  See 'What If The
+Driver Manager Isn't Configured Properly?' above.
+
+Known Issues
+============
+Always Encrypted is supported only by Microsoft ODBC Driver 13 (Preview) for SQL Server with SQL Server 2016 (Preview 3.4+). This preview release does not support the following:
+•	Bulk Operations via BCP or ODBC bulk functions
+•	Locales other than EN-US
+•	Azure Key Vault and custom Key Store Providers (Note: Local machine Key Store Providers are supported)
+
+Support
+=======
+
+If you have issues or problems, please contact us at the SQL Server Native
+Client forum (via our main page at
+http://msdn.microsoft.com/en-us/sqlserver/ff658532.aspx).

@@ -1,0 +1,69 @@
+INSTALL instructions for the MICROSOFT® ODBC Driver 13 (Preview) FOR SQL Server®
+
+This file contains installation instructions and notes about the 
+Microsoft® ODBC Driver 13 (Preview) for SQL Server® (hereafter called 'the driver').
+
+* If you're reading this after being referred by the installation output,
+  see 'Why is there an * in the configuration output?' in Installing below.
+
+
+INSTALLATION
+------------
+Verify the integrity of your download: 
+
+checksum of the download package should match the checksum file from the download site. 
+
+INSTALLING THE DRIVER MANAGER 
+
+Important: Delete any driver manager packages installed on your computer before you install the unixODBC Driver Manager. Installing the unixODBC Driver Manager could cause a failure of an existing Driver Manager. 
+
+Using the Installation Script:
+Make sure that you have root permissions.
+Go to the directory where the Microsoft SQL Server ODBC Driver download placed the file called msodbcsql-13.0.0.0.tar.gz. Make sure that you have the *.tar.gz file that matches your version of Linux. To extract the files, execute the following command: tar xvzf msodbcsql-13.0.0.0.tar.gz.
+Change to the msodbcsql-13.0.0.0 directory and there you should see a file called build_dm.sh. You can run build_dm.sh to install the unixODBC Driver Manager.
+To see a list of the available options, execute the following command: ./build_dm.sh --help.
+When you are ready to install, and if your computer can access an external site via FTP, execute the following command: ./build_dm.sh.
+
+If your computer cannot access an external site via FTP, get unixODBC-2.3.1.tar.gz. You can get unixODBC-2.3.1.tar.gz from http://www.unixodbc.org. Click the Download link on the left side of the page to go to the download page. Then click the appropriate link to download unixODBC-2.3.1 (not unixODBC-2.3.2). UnixODBC-2.3.2 is not supported with this release of the Microsoft ODBC Driver 13 (Preview) for SQL Server. Execute the following command to begin the unixODBC Driver Manager installation: ./build_dm.sh --download-url=file://unixODBC-2.3.1.tar.gz.
+Type YES to proceed with unpacking the files. This part of the process can take up to 5 minutes to complete
+After the script stops running, follow the instructions on the screen to install the unixODBC Driver Manager.
+
+You are now ready to install the driver. See Installing the Microsoft ODBC Driver for SQL Server on Linux for more information. 
+
+Manual Installation:
+
+If the installation script is unable to complete, configure and build the proper driver manager yourself.
+
+Remove any older installed version of unixODBC (for example, unixODBC 2.2.13) using your distribution's package manager.
+Go to http://www.unixodbc.org. Click the Download link on the left side of the page to go to the download page. Then click the appropriate link to save the file unixODBC-2.3.1.tar.gz to your computer. UnixODBC-2.3.2 is not supported with this release of the Microsoft ODBC Driver 13 (Preview) for SQL Server.
+On your Linux computer, execute the command: tar xvzf unixODBC-2.3.1.tar.gz.
+Change to the unixODBC-2.3.1 directory.
+At a command prompt, execute the command: CPPFLAGS="-DSIZEOF_LONG_INT=8".
+At a command prompt, execute the command: export CPPFLAGS.
+At a command prompt, execute the command: "./configure --prefix=/usr --libdir=/usr/lib64 --sysconfdir=/etc --enable-gui=no --enable-drivers=no --enable-iconv --with-iconv-char-enc=UTF8 --with-iconv-ucode-enc=UTF16LE".
+At a command prompt (logged in as root), execute the command: make.
+At a command prompt (logged in as root), execute the command: make install.
+
+You are now ready to install the driver. See Installing the Microsoft ODBC Driver 13 (Preview) for SQL Server on Linux for more information.
+
+
+INSTALLING THE MICROSOFT ODBC Driver 13 (Preview) FOR SQL SERVER ON LINUX 
+
+To install the driver: 
+Make sure that you have root permissions.
+Change to the directory where the ODBC Driver on Linux placed the file called msodbcsql-13.0.0.0.tar.gz. Make sure that you have the *.tar.gz file that matches your version of Linux. To extract the files, execute the following command, tar xvzf msodbcsql-13.0.0.0.tar.gz.
+Change to the msodbcsql-13.0.0.0 directory and there you should see a file called install.sh.
+To see a list of the available installation options, execute the following command: ./install.sh.
+Make a backup of odbcinst.ini. The driver installation updates odbcinst.ini. odbcinst.ini contains the list of drivers that are registered with the unixODBC Driver Manager. To discover the location of odbcinst.ini on your computer, execute the following command: odbc_config --odbcinstini.
+Before you install the driver, execute the following command: ./install.sh verify. The output of ./install.sh verify reports if your computer has the required software to support the ODBC Driver on Linux.
+When you are ready to install the ODBC Driver on Linux, execute the command: ./install.sh install. If you need to specify an install command (bin-dir or lib-dir), specify the command after the install option.
+After reviewing the license agreement, type YES to continue with the installation.
+
+Installation puts the driver in /opt/microsoft/msodbcsql/13.0.0.0. The driver and its support files must be in /opt/microsoft/msodbcsql/13.0.0.0.
+
+To verify that the ODBC Driver on Linux was registered successfully, execute the following command: odbcinst -q -d -n "ODBC Driver 13 for SQL Server" 
+
+TROUBLESHOOTING
+Missing Dependencies
+If you find that the install script will not continue because of errors it encounters, you can try to run it with the --force option to skip checking for dependencies. This may allow the installation to continue, however it can result in unpredictable driver behavior. You may need to install additional software to satisfy the dependencies of the driver.
+
